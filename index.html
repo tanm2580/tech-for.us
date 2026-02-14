@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="icon" type="image/png" href="Logo.png">
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-KN2TFD08QS"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-KN2TFD08QS');
+</script>
+
+<meta property="og:title" content="Welcome | TechForUS">
+<meta property="og:description" content="TechForUS empowers people with technology knowledge, freelancing opportunities, cyber security awareness, and paid tech services. Connect with learners, tech enthusiasts, and freelancers on a single platform.">
+<meta property="og:image" content="Logo.png">
+<meta property="og:url" content="https://tanm2580.github.io/tech-for.us/">
+<meta property="og:type" content="website">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Welcome | TechForUS">
+<meta name="twitter:description" content="TechForUS empowers people with technology knowledge, freelancing opportunities, cyber security awareness, and paid tech services. Connect with learners, tech enthusiasts, and freelancers on a single platform.">
+<meta name="twitter:image" content="Logo.png">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Welcome | TechForUS</title>
+<style>
+    * {margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
+    html {scroll-behavior: smooth;}
+    body {background:#0f2027; color:#fff; overflow-x:hidden;}
+    header {position:relative; height:100vh; text-align:center; display:flex; flex-direction:column; justify-content:center; align-items:center; overflow:hidden;}
+    header h1 {font-size:3rem; margin-bottom:0.5rem; z-index:2;}
+    header p {font-size:1.2rem; color:#cfd8dc; margin-bottom:1.5rem; z-index:2;}
+    .btn {padding:0.8rem 2rem; font-size:1rem; color:#fff; background:#00bcd4; border:none; border-radius:50px; cursor:pointer; text-decoration:none; transition:0.3s; z-index:2; position:relative;}
+    .btn:hover {background:#0097a7; transform:scale(1.05);}
+
+    section {max-width:900px; margin:2rem auto; background:rgba(0,0,0,0.5); padding:2rem 3rem; border-radius:15px; box-shadow:0 0 20px rgba(0,0,0,0.7); opacity:0; transform:translateY(50px); transition:1s;}
+    section.visible {opacity:1; transform:translateY(0);}
+    section h2 {margin-bottom:1rem; color:#00bcd4; font-size:2rem;}
+    section p {line-height:1.6; margin-bottom:1rem;}
+
+    .services-list {display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-top:1rem;}
+
+    .service-card {
+        background: rgba(255,255,255,0.08);
+        padding:1rem 1rem 0.8rem;
+        border-radius:12px;
+        position:relative;
+        transition:0.3s;
+    }
+
+    .service-header {
+        background: rgba(255,255,255,0.08);
+        border-radius:10px;
+        padding:0.9rem 1rem;
+        display:flex;
+        align-items:center;
+        gap:0.6rem;
+        cursor:pointer;
+        user-select:none;
+    }
+
+    .service-header i {font-size:1.8rem; color:#00bcd4; flex-shrink:0;}
+    .service-header h3 {margin:0; color:#00bcd4; font-size:1.1rem; flex:1;}
+
+    .toggle-arrow {
+        position:absolute;
+        left:50%;
+        bottom:-6px;
+        transform:translateX(-50%);
+        color:#00bcd4;
+        font-size:16px;
+        display:none;
+        cursor:pointer;
+        animation:hint 1.6s infinite;
+    }
+
+    .service-card.hint .toggle-arrow {display:block;}
+    .service-card.active .toggle-arrow {animation:none; transform:translateX(-50%) rotate(180deg);}
+
+    @keyframes hint {
+        0%,100% {transform:translateX(-50%) translateY(0);}
+        50% {transform:translateX(-50%) translateY(4px);}
+    }
+
+    .service-details {
+        max-height:0;
+        overflow:hidden;
+        opacity:0;
+        transform:translateY(-8px);
+        transition:max-height 0.35s ease, opacity 0.25s ease, transform 0.25s ease;
+        margin-top:0.8rem;
+        background:rgba(0,0,0,0.55);
+        padding:0 0.9rem;
+        border-radius:10px;
+        font-size:0.95rem;
+        line-height:1.5;
+    }
+
+    .service-card.active .service-details {
+        max-height:200px;
+        opacity:1;
+        transform:translateY(0);
+        padding:0.7rem 0.9rem;
+    }
+
+    #login-section {text-align:center; background:rgba(255,255,255,0.05); padding:2rem; border-radius:15px; margin:2rem auto;}
+    #login-section input, #login-section button {padding:0.8rem 1rem; margin:0.5rem; border-radius:50px; border:none;}
+    #login-section button {background:#00bcd4; color:#fff; cursor:pointer; transition:0.3s;}
+    #login-section button:hover {background:#0097a7;}
+
+    #login-msg {margin-top:1rem; font-size:1rem; display:none; align-items:center; justify-content:center; gap:0.5rem;}
+    #login-msg.success {color:#4caf50; display:flex;}
+    #login-msg.fail {color:#ff5252; display:flex;}
+
+    .tick-circle {
+        width:22px;
+        height:22px;
+        border-radius:50%;
+        background:#4caf50;
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        color:#fff;
+        font-size:14px;
+        font-weight:bold;
+    }
+
+    #preModal {display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); justify-content:center; align-items:center; z-index:999;}
+    #preModal .modal-content {background:#0f2027; padding:2rem; border-radius:15px; max-width:400px; width:90%; text-align:center;}
+    #preModal input, #preModal button {width:80%; padding:0.8rem; margin:0.5rem 0; border-radius:50px; border:none;}
+    #preModal button {background:#00bcd4; color:#fff; cursor:pointer; transition:0.3s;}
+    #preModal button:hover {background:#0097a7;}
+    #preModal .close {position:absolute; top:20px; right:30px; font-size:2rem; cursor:pointer;}
+
+    footer {text-align:center; padding:2rem; font-size:0.9rem; color:#cfd8dc;}
+    a {color:#00bcd4; text-decoration:none;}
+    a:hover {text-decoration:underline;}
+    canvas {position:absolute; top:0; left:0; width:100%; height:100%; z-index:1;}
+    @media(max-width:700px){.services-list{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<header>
+    <canvas id="particles"></canvas>
+    <h1>Welcome to TechForUS</h1>
+    <p>Your gateway to free tech solutions, learning, and innovation — powered by Taj's Lab.</p>
+    <a href="#services" class="btn">Explore Services</a>
+</header>
+
+<section id="about">
+    <h2>About TechForUS</h2>
+    <p>TechForUS is a social tech forum under Taj's Lab, designed to empower people with technology knowledge, freelancing opportunities, cyber security awareness, and paid tech services. We connect learners, tech enthusiasts, and freelancers on a single platform.</p>
+</section>
+
+<section id="mother-company">
+    <h2>About Taj's Lab</h2>
+    <p>
+        Taj's Lab is a multifaceted technology ecosystem established on 25 January 2022. Founder: 
+        <a href="https://www.facebook.com/profile.php?id=100012979476942" target="_blank" style="font-weight:bold;">I A T Tajwar</a>. 
+        From TechForUS to Tech Planet BD (E-commerce) and other ventures like import & supply and money exchange, Taj's Lab drives innovation, research, and reliable tech solutions both locally and globally.
+    </p>
+</section>
+
+<section id="services">
+    <h2>Main Services</h2>
+    <div class="services-list">
+
+        <div class="service-card hint">
+            <div class="service-header">
+                <i>💡</i><h3>Free Tech Solutions</h3>
+            </div>
+            <div class="service-details">
+                Access technology resources, guides, and step-by-step solutions for personal or professional use.
+            </div>
+            <div class="toggle-arrow">⌄</div>
+        </div>
+
+        <div class="service-card">
+            <div class="service-header">
+                <i>🛡️</i><h3>Cyber Security Awareness</h3>
+            </div>
+            <div class="service-details">
+                Learn to protect yourself online, understand common threats, and get actionable safety tips.
+            </div>
+            <div class="toggle-arrow">⌄</div>
+        </div>
+
+        <div class="service-card">
+            <div class="service-header">
+                <i>💼</i><h3>Freelancing & Paid Services</h3>
+            </div>
+            <div class="service-details">
+                Offer or hire tech services securely through TechForUS platform with verified professionals.
+            </div>
+            <div class="toggle-arrow">⌄</div>
+        </div>
+
+        <div class="service-card">
+            <div class="service-header">
+                <i>📚</i><h3>Knowledge Sharing</h3>
+            </div>
+            <div class="service-details">
+                Access articles, tutorials, and tech updates designed to enhance learning and innovation skills.
+            </div>
+            <div class="toggle-arrow">⌄</div>
+        </div>
+
+    </div>
+</section>
+
+<section id="login-section">
+    <h2>Login</h2>
+    <input type="text" id="loginUser" placeholder="Username"><br>
+    <input type="password" id="loginPass" placeholder="Password"><br>
+    <button onclick="handleLogin()">Login</button>
+    <div id="login-msg"></div>
+    <p style="margin-top:1rem;"><button class="btn" onclick="openPreModal()">Pre-register for Beta</button></p>
+</section>
+
+<div id="preModal">
+    <div class="modal-content">
+        <span class="close" onclick="closePreModal()">&times;</span>
+        <h2>Early Access Beta Testing</h2>
+        <form id="betaForm" onsubmit="handlePreRegister(event)">
+            <input type="text" id="preName" placeholder="Your Name" required><br>
+            <input type="email" id="preEmail" placeholder="Your Email" required><br>
+            <button type="submit">Pre-register</button>
+        </form>
+    </div>
+</div>
+
+<footer>
+    &copy; 2025 TechForUS | Powered by <a href="https://www.facebook.com/profile.php?id=100012979476942" target="_blank">Taj's Lab</a>
+</footer>
+
+<script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbxdKY8auKGb0Sx5z9_kLr90MyIW2PeALb0iIVu0NyqteGQvQ-AdCG5H7A2tYAiIzdYMHw/exec";
+
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    let particlesArray;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    window.addEventListener('resize', ()=>{
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        init();
+    });
+    class Particle {
+        constructor(){
+            this.x=Math.random()*canvas.width;
+            this.y=Math.random()*canvas.height;
+            this.size=Math.random()*3+1;
+            this.speedX=Math.random()*1-0.5;
+            this.speedY=Math.random()*1-0.5;
+        }
+        update(){this.x+=this.speedX; this.y+=this.speedY; if(this.x>canvas.width)this.x=0;if(this.x<0)this.x=canvas.width;if(this.y>canvas.height)this.y=0;if(this.y<0)this.y=canvas.height;}
+        draw(){ctx.fillStyle='rgba(0,188,212,0.7)'; ctx.beginPath(); ctx.arc(this.x,this.y,this.size,0,Math.PI*2); ctx.fill();}
+    }
+    function init(){particlesArray=[];for(let i=0;i<100;i++){particlesArray.push(new Particle());}}
+    function animate(){ctx.clearRect(0,0,canvas.width,canvas.height);particlesArray.forEach(p=>{p.update();p.draw();});requestAnimationFrame(animate);}
+    init();animate();
+
+    const sections=document.querySelectorAll('section');
+    const observer=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible');}});},{threshold:0.2});
+    sections.forEach(section=>observer.observe(section));
+
+    function openPreModal(){document.getElementById('preModal').style.display='flex';}
+    function closePreModal(){document.getElementById('preModal').style.display='none';}
+
+    async function handlePreRegister(e){
+        e.preventDefault();
+        const name = document.getElementById('preName').value;
+        const email = document.getElementById('preEmail').value;
+
+        const res = await fetch(API_URL, {
+            method: "POST",
+            body: JSON.stringify({action:"register", name, email})
+        });
+        const data = await res.json();
+
+        if (data.status === "exists") {
+            alert("you already submited for beta testing.");
+        } else {
+            alert("Pre-registration request received!");
+            document.getElementById('betaForm').reset();
+            closePreModal();
+        }
+    }
+
+    async function handleLogin(){
+        const username = document.getElementById('loginUser').value;
+        const password = document.getElementById('loginPass').value;
+
+        const res = await fetch(API_URL, {
+            method: "POST",
+            body: JSON.stringify({action:"login", username, password})
+        });
+        const data = await res.json();
+        const msgBox = document.getElementById('login-msg');
+
+        if (data.status === "success") {
+            msgBox.className = "success";
+            msgBox.innerHTML = `<span class="tick-circle">✓</span> Welcome '${data.name}'. Your Account Login Successful`;
+        } else {
+            msgBox.className = "fail";
+            msgBox.textContent = "Login failed: Wrong username or password!";
+        }
+    }
+
+    const serviceCards = document.querySelectorAll('.service-card');
+
+    function clearHints(){
+        serviceCards.forEach(c => c.classList.remove('hint'));
+    }
+
+    function setHintOn(index){
+        if (serviceCards[index]) serviceCards[index].classList.add('hint');
+    }
+
+    function closeAllServices(){
+        serviceCards.forEach(c => c.classList.remove('active'));
+    }
+
+    clearHints();
+    setHintOn(0);
+
+    serviceCards.forEach((card, idx)=>{
+        const arrow = card.querySelector('.toggle-arrow');
+        const header = card.querySelector('.service-header');
+
+        function toggleCard(e){
+            const isActive = card.classList.contains('active');
+            closeAllServices();
+            if (!isActive) {
+                card.classList.add('active');
+                clearHints();
+                setHintOn(idx + 1);
+            } else {
+                clearHints();
+                setHintOn(0);
+            }
+            e.stopPropagation();
+        }
+
+        arrow.addEventListener('click', toggleCard);
+        header.addEventListener('click', toggleCard);
+    });
+
+    document.addEventListener('click', (e)=>{
+        if (!e.target.closest('.service-card')) {
+            closeAllServices();
+            clearHints();
+            setHintOn(0);
+        }
+    });
+
+    window.addEventListener('scroll', ()=>{
+        closeAllServices();
+        clearHints();
+        setHintOn(0);
+    }, {passive:true});
+</script>
+</body>
+</html>
