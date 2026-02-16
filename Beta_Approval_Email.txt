@@ -1,0 +1,24 @@
+Subject: TechForUS Beta Access Approved – Your Login Credentials
+
+Hello [User Name],
+
+Thank you for joining the TechForUS Beta Testing Program.
+Your registration has been approved.
+
+Your login credentials are below:
+
+Username: [Your Username]
+Password: [Your Password]
+Login URL: https://tech-for.us
+Short Message from Admin:
+[Write your short personal message here]
+
+Please keep your credentials private and do not share them with others.
+
+If you face any login issue, reply to this email and we will assist you.
+
+Best regards,
+[Your Name]
+TechForUS Team
+[Optional Contact Info]
+
