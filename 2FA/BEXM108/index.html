@@ -1,0 +1,75 @@
+</section>
+  <footer>Powered by <a href="https://tech-for.us" target="_blank" rel="noopener noreferrer">TechForUS ↗</a></footer>
+</main>
+<script>
+'use strict';
+// TOTP secret is embedded locally; keep this HTML file private.
+const SECRET = 'MXPQSXYM5BF2DUJ4E76RWBCHWU3SNFHH';
+const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+function decodeBase32(input){
+  const s=input.toUpperCase().replace(/=+$/,'').replace(/\s/g,'');
+  let bits='', out=[];
+  for(const c of s){
+    const v=alphabet.indexOf(c);
+    if(v<0) throw new Error('Invalid Base32 secret');
+    bits += v.toString(2).padStart(5,'0');
+    while(bits.length>=8){out.push(parseInt(bits.slice(0,8),2));bits=bits.slice(8);}
+  }
+  return new Uint8Array(out);
+}
+let keyPromise;
+async function getKey(){
+  if(!keyPromise){
+    keyPromise=crypto.subtle.importKey('raw',decodeBase32(SECRET),{name:'HMAC',hash:'SHA-1'},false,['sign']);
+  }
+  return keyPromise;
+}
+async function makeCode(counter){
+  const msg=new ArrayBuffer(8), view=new DataView(msg);
+  view.setUint32(0,Math.floor(counter/0x100000000));
+  view.setUint32(4,counter>>>0);
+  const sig=new Uint8Array(await crypto.subtle.sign('HMAC',await getKey(),msg));
+  const offset=sig[sig.length-1]&15;
+  const n=((sig[offset]&127)<<24)|(sig[offset+1]<<16)|(sig[offset+2]<<8)|sig[offset+3];
+  return String(n%1000000).padStart(6,'0');
+}
+let currentCode='';
+async function refresh(){
+  try{
+    const now=Math.floor(Date.now()/1000), remaining=30-(now%30);
+    document.getElementById('seconds').textContent=remaining;
+    document.getElementById('bar').style.width=(remaining/30*100)+'%';
+    const next=await makeCode(Math.floor(now/30));
+    currentCode=next;
+    const codeElement=document.getElementById('code');
+    if(codeElement.textContent!==next) codeElement.textContent=next;
+  }catch(e){
+    document.getElementById('code').textContent='------';
+    document.getElementById('status').textContent='Unable to generate code in this browser.';
+  }
+}
+async function copyCode(){
+  const status=document.getElementById('status');
+  if(!currentCode){status.textContent='No code available yet. Please wait.';return;}
+  try{
+    if(navigator.clipboard && window.isSecureContext){
+      await navigator.clipboard.writeText(currentCode);
+    }else{
+      const field=document.createElement('textarea');
+      field.value=currentCode;field.setAttribute('readonly','');
+      field.style.position='fixed';field.style.opacity='0';field.style.left='-9999px';
+      document.body.appendChild(field);field.focus();field.select();field.setSelectionRange(0,field.value.length);
+      const ok=document.execCommand('copy');field.remove();
+      if(!ok) throw new Error('Copy command failed');
+    }
+    status.textContent='Code copied to clipboard.';
+  }catch(e){
+    status.textContent='Copy was blocked. Please select and copy the code manually.';
+  }
+}
+document.getElementById('copy').addEventListener('click',copyCode);
+refresh();setInterval(refresh,250);
+</script>
+
+</body>
+</html>
