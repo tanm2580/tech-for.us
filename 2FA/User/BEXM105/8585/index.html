@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#061321">
+<title>Authenticator Code Generator | TechForUS</title>
+<style>
+:root{color-scheme:dark;--bg:#061321;--panel:#0a1b2c;--line:#123b58;--cyan:#08d8ef;--blue:#147cff;--pale:#b9e8ff;--muted:#82a8c8}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% 0%,#0b2b47 0%,#061321 48%,#040d18 100%);color:#f3f8ff;font-family:Inter,Arial,Helvetica,sans-serif;padding:0 20px 30px;overflow-x:hidden;position:relative}
+body:before,body:after{content:"";position:fixed;pointer-events:none;border:1px solid #0879bd35;width:360px;height:360px;border-radius:50%;filter:blur(1px);z-index:-1}
+body:before{left:-250px;top:35%}body:after{right:-260px;bottom:-100px}
+.topbar{max-width:1120px;margin:auto;min-height:88px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #16405b;padding:14px 4px}
+.brand{display:flex;align-items:center;gap:12px;font-size:clamp(22px,4vw,32px);font-weight:800;letter-spacing:-1px}
+.brand-mark{width:38px;height:42px;position:relative;display:inline-block;clip-path:polygon(0 0,100% 0,76% 22%,55% 22%,55% 100%,38% 100%,38% 22%,0 22%);background:linear-gradient(145deg,#087cff,#04d9ec)}
+.brand span span{background:linear-gradient(90deg,#fff,#8bdfff 55%,#04d9ec);background-clip:text;-webkit-background-clip:text;color:transparent}
+.visit{border:1px solid #08bce8;border-radius:30px;padding:11px 20px;color:#e8f7ff;text-decoration:none;font-size:14px;box-shadow:0 0 18px #087cff20;white-space:nowrap}
+.visit strong{color:#20c9f4}
+main{width:min(100%,900px);margin:42px auto 0;text-align:center}
+.shield{width:76px;height:76px;border-radius:22px;margin:0 auto 20px;display:grid;place-items:center;border:1px solid #078ac6;background:linear-gradient(145deg,#09243a,#071725);box-shadow:0 0 30px #00bfe51a;color:#15c9f3}
+.shield svg{width:43px;height:43px}
+h1{font-size:clamp(29px,5.5vw,48px);line-height:1.12;letter-spacing:-1.5px;margin:0 0 13px;font-weight:800}
+h1 .accent{background:linear-gradient(90deg,#229bff,#08dce8);background-clip:text;-webkit-background-clip:text;color:transparent}
+.intro{font-size:clamp(15px,2.5vw,20px);color:#b4d2ec;margin:0 0 7px}
+.note{font-size:15px;color:#759cbe;margin:0 0 28px}
+.generator{max-width:760px;margin:0 auto;padding:30px clamp(18px,5vw,48px);border:1px solid #087fb1;border-radius:24px;background:linear-gradient(145deg,rgba(14,38,57,.94),rgba(5,20,34,.97));box-shadow:0 18px 60px #0005,0 0 30px #008bc51a;position:relative}
+.code-layout{display:flex;align-items:center;justify-content:center;gap:clamp(12px,3vw,28px);margin:0 auto 22px}
+#code{display:block;text-align:center;font-size:clamp(27px,6vw,40px);font-weight:800;letter-spacing:clamp(3px,1.4vw,9px);color:#a9e6ff;font-variant-numeric:tabular-nums;user-select:text;-webkit-user-select:text;-webkit-touch-callout:default;cursor:text}
+.digit{display:grid;place-items:center;width:clamp(38px,10vw,76px);height:clamp(60px,14vw,92px);border:1px solid #1b4864;border-radius:13px;background:linear-gradient(145deg,#0d2639,#091a29);text-shadow:0 0 20px #12bdf2aa;box-shadow:inset 0 1px #ffffff08}
+.timer{width:clamp(66px,15vw,94px);height:clamp(66px,15vw,94px);flex:0 0 auto;border-radius:50%;display:grid;place-items:center;background:conic-gradient(#08d9ed 0deg,#147cff 260deg,#17415b 260deg);padding:5px;box-shadow:0 0 22px #00bce52b}
+.timer-inner{width:100%;height:100%;border-radius:50%;background:#091a2a;display:flex;flex-direction:column;justify-content:center;align-items:center}
+#seconds{font-size:25px;font-weight:800;color:#d9f2ff;line-height:1.1}
+.timer-inner small{font-size:11px;color:#8cb7d6;margin-top:3px}
+#bar{height:4px;width:100%;background:linear-gradient(90deg,#137cff,#08d9ed);border-radius:8px;margin:0 0 22px;transition:width .2s linear}
+#copy{width:100%;border:0;border-radius:13px;padding:16px 18px;background:linear-gradient(100deg,#126dff,#06cde9);color:white;font-size:17px;font-weight:800;cursor:pointer;box-shadow:0 7px 24px #007bff35}
+#copy:hover{filter:brightness(1.1)}#copy:active{transform:scale(.995)}
+.copy-icon{display:inline-block;vertical-align:-4px;margin-right:10px}
+#status{min-height:44px;display:flex;align-items:center;justify-content:center;gap:9px;border:1px solid #087b72;border-radius:12px;background:#042a2d;color:#22e5dc;font-size:14px;margin-top:16px;padding:10px}
+.features{max-width:900px;margin:28px auto 0;display:grid;grid-template-columns:repeat(3,1fr);border:1px solid #123a55;border-radius:20px;background:#091a2a99;padding:18px 10px}
+.feature{padding:8px 14px;display:flex;align-items:center;justify-content:center;gap:12px;text-align:left}
+.feature+.feature{border-left:1px solid #16415d}
+.feature-icon{width:42px;height:42px;flex:0 0 42px;border-radius:50%;display:grid;place-items:center;color:#16c9f2;background:#082b47;border:1px solid #104d76}
+.feature b{display:block;font-size:14px;margin-bottom:4px}.feature small{color:#7fa8c9;font-size:12px;line-height:1.35}
+footer{text-align:center;color:#82a8c8;font-size:14px;margin:27px 0 0}
+footer a{color:#10d1ed;text-decoration:none;font-weight:800}footer a:hover{text-decoration:underline}
+@media(max-width:620px){body{padding:0 14px 24px}.topbar{min-height:72px}.brand{gap:8px}.brand-mark{width:30px;height:34px}.visit{padding:9px 12px;font-size:12px}main{margin-top:32px}.generator{padding:24px 14px}.features{grid-template-columns:1fr;padding:8px 16px}.feature{justify-content:flex-start;padding:13px 8px}.feature+.feature{border-left:0;border-top:1px solid #16415d}.code-layout{gap:10px}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><i class="brand-mark" aria-hidden="true"></i><span>Tech<span>ForUS</span></span></div>
+  <a class="visit" href="https://tech-for.us" target="_blank" rel="noopener noreferrer">Visit <strong>TechForUS ↗</strong></a>
+</header>
+<main>
+  <div class="shield" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5 20 6v5.5c0 5.1-3.4 8.6-8 10-4.6-1.4-8-4.9-8-10V6l8-3.5Z"/><rect x="8.5" y="10.5" width="7" height="6" rx="1.2"/><path d="M10 10.5V8.8a2 2 0 0 1 4 0v1.7"/></svg></div>
+  <h1>Authenticator <span class="accent">Code Generator</span></h1>
+  <p class="intro">Generate your 6-digit authenticator code in real time.</p>
+  <p class="note">The code refreshes automatically every 30 seconds.</p>
+  <section class="generator" aria-label="Authenticator code">
+    <div class="code-layout">
+      <div id="code" aria-live="polite">------</div>
+      <div class="timer"><div class="timer-inner"><strong id="seconds">--</strong><small>SECONDS</small></div></div>
+    </div>
+    <div id="bar"></div>
+    <button id="copy" type="button"><svg class="copy-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>Copy Code</button>
+    <div id="status" role="status" aria-live="polite">Your code is ready to copy.</div>
+  </section>
+  <section class="features" aria-label="Generator features">
+    <div class="feature"><span class="feature-icon">↻</span><div><b>Auto Refresh</b><small>New code every 30 seconds</small></div></div>
+    <div class="feature"><span class="feature-icon">◇</span><div><b>Secure</b><small>Your code is generated in-browser</small></div></div>
+    <div class="feature"><span class="feature-icon">▣</span><div><b>Private</b><small>No data is stored online</small></div></div>
+  </section>
+  <footer>Powered by <a href="https://tech-for.us" target="_blank" rel="noopener noreferrer">TechForUS ↗</a></footer>
+</main>
+<script>
+'use strict';
+// TOTP secret is embedded locally; keep this HTML file private.
+const SECRET = '';
+const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+function decodeBase32(input){
+  const s=input.toUpperCase().replace(/=+$/,'').replace(/\s/g,'');
+  let bits='', out=[];
+  for(const c of s){
+    const v=alphabet.indexOf(c);
+    if(v<0) throw new Error('Invalid Base32 secret');
+    bits += v.toString(2).padStart(5,'0');
+    while(bits.length>=8){out.push(parseInt(bits.slice(0,8),2));bits=bits.slice(8);}
+  }
+  return new Uint8Array(out);
+}
+let keyPromise;
+async function getKey(){
+  if(!keyPromise){
+    keyPromise=crypto.subtle.importKey('raw',decodeBase32(SECRET),{name:'HMAC',hash:'SHA-1'},false,['sign']);
+  }
+  return keyPromise;
+}
+async function makeCode(counter){
+  const msg=new ArrayBuffer(8), view=new DataView(msg);
+  view.setUint32(0,Math.floor(counter/0x100000000));
+  view.setUint32(4,counter>>>0);
+  const sig=new Uint8Array(await crypto.subtle.sign('HMAC',await getKey(),msg));
+  const offset=sig[sig.length-1]&15;
+  const n=((sig[offset]&127)<<24)|(sig[offset+1]<<16)|(sig[offset+2]<<8)|sig[offset+3];
+  return String(n%1000000).padStart(6,'0');
+}
+let currentCode='';
+async function refresh(){
+  try{
+    const now=Math.floor(Date.now()/1000), remaining=30-(now%30);
+    document.getElementById('seconds').textContent=remaining;
+    document.getElementById('bar').style.width=(remaining/30*100)+'%';
+    const next=await makeCode(Math.floor(now/30));
+    currentCode=next;
+    const codeElement=document.getElementById('code');
+    if(codeElement.textContent!==next) codeElement.textContent=next;
+  }catch(e){
+    document.getElementById('code').textContent='------';
+    document.getElementById('status').textContent='Unable to generate code in this browser.';
+  }
+}
+async function copyCode(){
+  const status=document.getElementById('status');
+  if(!currentCode){status.textContent='No code available yet. Please wait.';return;}
+  try{
+    if(navigator.clipboard && window.isSecureContext){
+      await navigator.clipboard.writeText(currentCode);
+    }else{
+      const field=document.createElement('textarea');
+      field.value=currentCode;field.setAttribute('readonly','');
+      field.style.position='fixed';field.style.opacity='0';field.style.left='-9999px';
+      document.body.appendChild(field);field.focus();field.select();field.setSelectionRange(0,field.value.length);
+      const ok=document.execCommand('copy');field.remove();
+      if(!ok) throw new Error('Copy command failed');
+    }
+    status.textContent='Code copied to clipboard.';
+  }catch(e){
+    status.textContent='Copy was blocked. Please select and copy the code manually.';
+  }
+}
+document.getElementById('copy').addEventListener('click',copyCode);
+refresh();setInterval(refresh,250);
+</script>
+
+</body>
+</html>
